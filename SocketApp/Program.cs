@@ -54,7 +54,7 @@ app.Map("/SocketApp", async context =>
 app.UseRouting();
 
 app.UseAuthorization();
-app.MapHub<SocketHub>("/Trader-Makler-Chat");
+app.MapHub<SocketHub>("/Broker-Trader-Chat");
 app.MapRazorPages();
 
-app.Run();
+app.Run(builder.Configuration["ApplicationHost:Address"]);
