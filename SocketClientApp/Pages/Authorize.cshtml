@@ -1,0 +1,67 @@
+﻿@page
+@using SocketClientApp.Models
+@model AuthorizeModel
+@{
+	ViewData["Title"] = "SignIn";
+}
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+
+        #auth-form {
+            display: flex;
+            flex-direction: column;
+            width: 300px;
+        }
+
+        #textlogin, #textpassword {
+            margin-bottom: 10px;
+        }
+
+    </style>
+    <title>@ViewData["Title"]</title>
+</head>
+<body>
+
+    <div class="text-center">
+        <h1 class="display-4">SignIn</h1>
+    </div>
+
+    <form id="auth-form">
+        <input type="text" name="login" class="name" placeholder="Name" id="textlogin" />
+        <input type="text" name="password" class="password" placeholder="Password" id="textpassword" />
+        <input type="submit" name="sendButton" value="Send" />
+    </form>
+
+    <script>
+        document.getElementById("auth-form").onsubmit = async function(event){
+            event.preventDefault();
+            const login = document.getElementById("textlogin").value;
+            const password = document.getElementById("textpassword").value;
+
+            const user = {
+                Username: login,
+                Password: password
+            }
+
+            const response = await fetch("http://192.168.5.32:5000/api/Auth/SignIn", {
+                method: "POST",
+                headers:{
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(user)
+            })
+            if(response.ok){
+                window.location.href = "/Chat";
+            }
+            else{
+                alert("Login fail");
+            }
+        };
+    </script>
+</body>
+</html>

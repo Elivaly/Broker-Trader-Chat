@@ -1,0 +1,70 @@
+﻿@page
+@model SocketClientApp.Pages.ChatModel
+@{
+	ViewData["Title"] = "Broker-Trader Chat";
+}
+
+<!DOCTYPE html>
+<html lang="ru">
+	<head>
+		<meta charset="UTF-8"/>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<style>
+        #chat-form {
+            display: flex;
+            flex-direction: column;
+            width: 300px;
+        }
+
+        #message {
+            margin-bottom: 10px;
+        }
+		</style>
+        <title>@ViewData["Title"]</title>
+	</head>
+    <body>
+       <div class="text-center">
+           <h1 class="display-4">Chat</h1>
+       </div>
+
+       <form id="chat-form">
+           <input type="text" name="message" id="message" placeholder="Message" />
+           <input type="submit" name="sendButton" value="Send" />
+       </form>
+       <div id="messages"></div>
+
+       <script>
+           const socket = new WebSocket("ws://localhost:8000"); //адрес сокет сервера
+
+           socket.onopen = function(event){
+               console.log("Удалось установить соединение с сокет сервером");
+           };
+
+           socket.onmessage = function(event){
+               const messageEl = document.createElement("div");
+               messageEl.textContent = event.data;
+               document.getElementById("messages").appendChild(messageEl);
+           };
+
+           socket.onerror = function(error){
+               console.error("Ошибка сокета: ", error);
+           };
+
+           socket.onclose = function(event){
+               if(event.wasClean) {
+                   console.log("Соединение закрылось без ошибок, Код: ${event.code}, Причина: ${event.reason}");
+               }
+               else{
+                   console.error("Соединение закрылось из-за ошибки");
+               }
+           };
+
+           document.getElementById("chat-form").onsubmit = function(event){
+               event.preventDefault();
+               const message = document.getElementById("message").value;
+               socket.send(message);
+               document.getElementById("message").value = "";
+           };
+       </script>
+    </body>
+</html>
