@@ -6,7 +6,7 @@ namespace SocketApp
     {
         public async Task Send(string message)
         {
-            await this.Clients.All.SendAsync("Уведомление", message);
+            await this.Clients.All.SendAsync("Receive", message);
         }
     }
 }
