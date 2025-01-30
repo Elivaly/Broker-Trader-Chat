@@ -34,7 +34,7 @@
        <div id="messages"></div>
 
        <script>
-           const socket = new WebSocket("ws://localhost:8000"); //адрес сокет сервера
+           const socket = new WebSocket("ws://192.168.5.32:5149"); //адрес сокет сервера
 
            socket.onopen = function(event){
                console.log("Удалось установить соединение с сокет сервером");
@@ -59,12 +59,30 @@
                }
            };
 
-           document.getElementById("chat-form").onsubmit = function(event){
+           document.getElementById("chat-form").onsubmit = async function(event){
                event.preventDefault();
                const message = document.getElementById("message").value;
-               socket.send(message);
+               const messageObj = {
+                   Message_Text: message
+               };
+
+               const response = await fetch("http://192.168.5.32:5000/api/Sender/SendMessage", {
+                   method: "POST",
+                   headers: {
+                       "Content-Type" : "application/json"
+                   },
+                   body: JSON.stringify(messageObj)
+               });
+               if(response.ok){
+                   console.log("Отправлено сообщение");
+                   socket.send(message);
+               }
+               else{
+                   alert("Не получилось отправить сообщение");
+               }
                document.getElementById("message").value = "";
            };
+
        </script>
     </body>
 </html>

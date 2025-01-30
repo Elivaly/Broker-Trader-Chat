@@ -46,7 +46,7 @@
             const user = {
                 Username: login,
                 Password: password
-            }
+            };
 
             const response = await fetch("http://192.168.5.32:5000/api/Auth/SignIn", {
                 method: "POST",
@@ -54,7 +54,7 @@
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify(user)
-            })
+            });
             if(response.ok){
                 window.location.href = "/Chat";
             }
