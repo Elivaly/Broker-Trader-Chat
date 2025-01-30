@@ -44,7 +44,7 @@
 
        <script>
 
-           const socket = new WebSocket("ws://192.168.5.32:5149/SocketClientApp"); //адрес сокет сервера
+           const socket = new WebSocket('ws://192.168.5.32:5149/ws'); //адрес сокет сервера
 
            socket.onopen = function(event){
                console.log("Удалось установить соединение с сокет сервером");
@@ -65,22 +65,17 @@
                    console.log("Соединение закрылось без ошибок, Код: ${event.code}, Причина: ${event.reason}");
                }
                else{
-                   console.error("Соединение закрылось из-за ошибки");
+                console.error("Соединение закрылось из-за ошибки Код: ${event.code}, Причина: ${event.reason}");
                }
            };
 
            document.getElementById("chat-form").onsubmit = async function(event){
                event.preventDefault();
                const message = document.getElementById("message").value;
-                  if (message.trim() !== "" && socket.readyState === WebSocket.OPEN){
+                 
                     const messageObj = {
                         Message_Text: message
                     };
-                  }
-                  else
-                  {
-                    console.log("connection error");
-                  }
                const response = await fetch("http://192.168.5.32:5000/api/Sender/SendMessage", {
                    method: "POST",
                    headers: {
@@ -97,28 +92,6 @@
                }
                document.getElementById("message").value = "";
            };
-
-        console.log(socket.readyState === WebSocket.OPEN);
-
-           var receive = async function() {
-               var  buffer = new Uint8Array(4096);
-               while (true) {
-                   var result = await socket.receive(new ArraySegment(buffer), CancellationToken.None);
-
-                    if (result.MessageType === WebSocketMessageType.Close) {
-                        break;
-                    }    
-
-                    var message = new TextDecoder("utf-8").decode(buffer.slice(0, result.Count));
-                    if (message.trim() !== "") {
-                        const messageElem = document.createElement('div');
-                        messageEl.textContent = message;
-                        document.getElementById('messages').appendChild(messageEl);
-                    }
-               }
-           };
-
-           receive();
        </script>
     </body>
 </html>
