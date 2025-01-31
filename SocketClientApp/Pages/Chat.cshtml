@@ -22,10 +22,10 @@
 
         #messages {
             margin-top: 20px;
-            width: 300px;
+            width: 1200px;
             border: 1px solid pink;
             padding: 10px;
-            max-height: 400px;
+            max-height: 600px;
             overflow-y: auto;
         }
 		</style>
@@ -72,9 +72,19 @@
            document.getElementById("chat-form").onsubmit = async function(event){
                event.preventDefault();
                const message = document.getElementById("message").value;
-                 
+
+                const userID = await fetch(`http://192.168.5.32:5000/api/User/GetCurrentID`, {
+                method: "GET",
+                headers:{
+                    "Content-Type":"application/json"
+                }
+                });
+                userID = userID.json();
+
+               const userID = 
                     const messageObj = {
                         Message_Text: message
+                        ID_User: userID
                     };
                const response = await fetch("http://192.168.5.32:5000/api/Sender/SendMessage", {
                    method: "POST",
@@ -84,6 +94,7 @@
                    body: JSON.stringify(messageObj)
                });
                if(response.ok){
+                   console.log(text);
                    console.log("Отправлено сообщение");
                    socket.send(message);
                }
