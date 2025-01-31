@@ -48,23 +48,29 @@
                 Password: password
             };
 
-            const response = await fetch("http://192.168.5.32:5000/api/Auth/SignIn", {
+            const response = await fetch(`http://192.168.5.32:5000/api/Auth/SignIn`, {
                 method: "POST",
                 headers:{
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify(user)
             });
-            if(response.ok){
+
+            const role = await fetch(`http://192.168.5.32:5000/api/User/GetUserRole?name=${login}`, {
+                method: "GET",
+                headers:{
+                    "Content-Type":"application/json"
+                }
+            });
+
+            if(response.ok && role.ok){
+                const text = await role.json();
+                console.log(text);
                 window.location.href = "/Chat";
             }
             else{
                 alert("Login fail");
             }
-
-            const role = await fetch("http://192.168.5.32:5000/api/User/GetRole", {
-
-            });
         };
 
     </script>
