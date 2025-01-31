@@ -73,28 +73,37 @@
                event.preventDefault();
                const message = document.getElementById("message").value;
 
-                const userID = await fetch(`http://192.168.5.32:5000/api/User/GetCurrentID`, {
-                method: "GET",
-                headers:{
-                    "Content-Type":"application/json"
-                }
-                });
-                userID = userID.json();
+               const response = await fetch("http://192.168.5.32:5000/api/User/GetCurrentID", {
+               method: "GET",
+               headers:{
+               "Content-Type":"application/json"
+               }
+               });
 
-               const userID = 
-                    const messageObj = {
-                        Message_Text: message
-                        ID_User: userID
-                    };
-               const response = await fetch("http://192.168.5.32:5000/api/Sender/SendMessage", {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                console.log("Ответ от сервера: ", data); // Добавьте вывод в консоль для проверки
+
+                const currentID = data.id;
+                console.log("Полученный ID: ", currentID); // Добавьте вывод в консоль для проверки
+
+                const messageObj = {
+                    Message_Text: message,
+                     ID_User: currentID
+                };
+
+               const responseSend = await fetch(`http://192.168.5.32:5000/api/Sender/SendMessage`, {
                    method: "POST",
                    headers: {
                        "Content-Type" : "application/json"
                    },
                    body: JSON.stringify(messageObj)
                });
-               if(response.ok){
-                   console.log(text);
+
+               if(responseSend.ok){
                    console.log("Отправлено сообщение");
                    socket.send(message);
                }
