@@ -48,7 +48,7 @@
                 Password: password
             };
 
-            const response = await fetch(`http://192.168.5.32:5433/api/Auth/SignIn`, {
+            const response = await fetch(`http://192.168.5.32:5000/api/Auth/SignIn`, {
                 method: "POST",
                 headers:{
                     "Content-Type": "application/json"
@@ -56,7 +56,7 @@
                 body: JSON.stringify(user)
             });
 
-            const role = await fetch(`http://192.168.5.32:5433/api/User/GetUserRole?name=${login}`, {
+            const role = await fetch(`http://192.168.5.32:5000/api/User/GetUserRole?name=${login}`, {
                 method: "GET",
                 headers:{
                     "Content-Type":"application/json"
