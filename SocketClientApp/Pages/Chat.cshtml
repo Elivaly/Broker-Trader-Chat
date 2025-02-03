@@ -73,27 +73,25 @@
                event.preventDefault();
                const message = document.getElementById("message").value;
 
-               const response = await fetch("http://192.168.5.32:5000/api/User/GetCurrentID", {
-               method: "GET",
-               headers:{
-               "Content-Type":"application/json"
-               }
+               const responseGet = await fetch(`http://192.168.5.32:5149/api/Listener/GetID`, {
+                   method: "GET",
+                   headers: {
+                       "Content-Type" : "application/json"
+                   }
                });
 
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
+               var data = await responseGet.json();
+               console.log("Ответ от сервера: ", data);
 
-                const data = await response.json();
-                console.log("Ответ от сервера: ", data); // Добавьте вывод в консоль для проверки
+               const currentID = data.id;
+               console.log("Полученный ID: ", currentID);
 
-                const currentID = data.id;
-                console.log("Полученный ID: ", currentID); // Добавьте вывод в консоль для проверки
-
-                const messageObj = {
+               const messageObj = {
                     Message_Text: message,
-                     ID_User: currentID
-                };
+                    ID_User: currentID
+               };
+
+
 
                const responseSend = await fetch(`http://192.168.5.32:5000/api/Sender/SendMessage`, {
                    method: "POST",
