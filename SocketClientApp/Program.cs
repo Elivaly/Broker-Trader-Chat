@@ -1,8 +1,16 @@
-
-using System.Text;
-using Microsoft.AspNetCore.Builder;
-
 var builder = WebApplication.CreateBuilder(args);
+
+
+// CORS Policy
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", builder =>
+    {
+        builder.AllowAnyOrigin()
+        .AllowAnyMethod()
+        .AllowAnyHeader();
+    });
+});
 
 // Add services to the container.
 builder.Services.AddRazorPages();
@@ -22,6 +30,7 @@ if (!app.Environment.IsDevelopment())
 app.UseStaticFiles();
 app.UseRouting();
 app.UseWebSockets();
+app.UseCors("AllowAll");
 app.UseAuthorization();
 app.MapRazorPages();
 app.Run(builder.Configuration["ApplicationHost:Address"]);

@@ -1,6 +1,4 @@
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using SocketClientApp.Models;
 
 namespace SocketClientApp.Pages
 {

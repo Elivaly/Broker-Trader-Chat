@@ -73,27 +73,13 @@
                event.preventDefault();
                const message = document.getElementById("message").value;
 
-               const responseGet = await fetch(`http://192.168.5.32:5149/api/Listener/GetID`, {
-                   method: "GET",
-                   headers: {
-                       "Content-Type" : "application/json"
-                   }
-               });
-
-               var data = await responseGet.json();
-               console.log("Ответ от сервера: ", data);
-
-               const currentID = data.id;
-               console.log("Полученный ID: ", currentID);
-
-               const messageObj = {
-                    Message_Text: message,
-                    ID_User: currentID
+               var messageObj = {
+                    Message_Text: message
                };
 
 
 
-               const responseSend = await fetch(`http://192.168.5.32:5000/api/Sender/SendMessage`, {
+               const responseSend = await fetch(`http://192.168.5.32:5433/api/Sender/SendMessage`, {
                    method: "POST",
                    headers: {
                        "Content-Type" : "application/json"
