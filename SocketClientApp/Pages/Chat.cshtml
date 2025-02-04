@@ -44,7 +44,7 @@
 
        <script>
 
-           const socket = new WebSocket("ws://192.168.5.32:5149/ws"); //адрес сокет сервера
+           const socket = new WebSocket("ws:192.168.5.32:5149/ws");
 
            socket.onopen = function(event){
                console.log("Удалось установить соединение с сокет сервером");
@@ -77,15 +77,29 @@
                     Message_Text: message
                };
 
-
+               var token = localStorage.getItem("Token");
+               console.log("IMPORTANT " + token);
 
                const responseSend = await fetch(`http://192.168.5.32:5000/api/Sender/SendMessage`, {
                    method: "POST",
                    headers: {
-                       "Content-Type" : "application/json"
+                       "Content-Type" : "application/json",
+                       "Authorization": `${token}`
                    },
                    body: JSON.stringify(messageObj)
                });
+
+               
+               var login = localStorage.getItem("Login");
+               const role = await fetch(`http://192.168.5.32:5000/api/User/GetUserRole?name=${login}`, {
+               method: "GET",
+               headers:{
+                   "Content-Type":"application/json"
+               }
+         });
+         const text = await role.json();
+               console.log(text);
+
 
                if(responseSend.ok){
                    console.log("Отправлено сообщение");

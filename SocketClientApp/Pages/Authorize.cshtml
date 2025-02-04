@@ -56,11 +56,16 @@
                 body: JSON.stringify(user)
             });
 
+            var data = await response.json();
+            var token = data.token;
+            localStorage.setItem("Token", token);
+            localStorage.setItem("Login", login);
+
             const role = await fetch(`http://192.168.5.32:5000/api/User/GetUserRole?name=${login}`, {
-                method: "GET",
-                headers:{
-                    "Content-Type":"application/json"
-                }
+            method: "GET",
+            headers:{
+                 "Content-Type":"application/json"
+            }
             });
 
             if(response.ok && role.ok){
