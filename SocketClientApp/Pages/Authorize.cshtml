@@ -58,8 +58,7 @@
 
             var data = await response.json();
             var token = data.token;
-            localStorage.setItem("Token", token);
-            localStorage.setItem("Login", login);
+            sessionStorage.setItem("Token", token);
 
             const role = await fetch(`http://192.168.5.32:5000/api/User/GetUserRole?name=${login}`, {
             method: "GET",

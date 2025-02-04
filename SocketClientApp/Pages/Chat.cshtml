@@ -77,8 +77,7 @@
                     Message_Text: message
                };
 
-               var token = localStorage.getItem("Token");
-               console.log("IMPORTANT " + token);
+               var token = sessionStorage.getItem("Token");
 
                const responseSend = await fetch(`http://192.168.5.32:5000/api/Sender/SendMessage`, {
                    method: "POST",
@@ -89,23 +88,12 @@
                    body: JSON.stringify(messageObj)
                });
 
-               
-               var login = localStorage.getItem("Login");
-               const role = await fetch(`http://192.168.5.32:5000/api/User/GetUserRole?name=${login}`, {
-               method: "GET",
-               headers:{
-                   "Content-Type":"application/json"
-               }
-         });
-         const text = await role.json();
-               console.log(text);
-
-
                if(responseSend.ok){
                    console.log("Отправлено сообщение");
                    socket.send(message);
                }
-               else{
+               else
+               {
                    alert("Не получилось отправить сообщение");
                }
                document.getElementById("message").value = "";
