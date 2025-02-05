@@ -73,17 +73,27 @@
                event.preventDefault();
                const message = document.getElementById("message").value;
 
-               var messageObj = {
-                    Message_Text: message
-               };
-
                var token = sessionStorage.getItem("Token");
+
+               const resonseGet = await fetch(`http://192.168.5.32:5000/api/Token/GetID?token=${token}`, {
+                   method: "GET",
+                   headers: {
+                       "Content-Type" : "application/json"
+                   }
+               });
+
+               var data = await resonseGet.json();
+               var id = data.id;
+
+               var messageObj = {
+                   Message_Text: message,
+                   ID_User: id
+               };
 
                const responseSend = await fetch(`http://192.168.5.32:5000/api/Sender/SendMessage`, {
                    method: "POST",
                    headers: {
-                       "Content-Type" : "application/json",
-                       "Authorization": `${token}`
+                       "Content-Type" : "application/json"
                    },
                    body: JSON.stringify(messageObj)
                });
